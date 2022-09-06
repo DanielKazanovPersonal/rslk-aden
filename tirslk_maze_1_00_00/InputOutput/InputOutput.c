@@ -90,6 +90,19 @@ void Port1_Init(void){
    * Your code should ONLY modify bits 0, 1, and 4 of Port 1 as required.
    * Remember, | to set bits, & to clear bits
   */
+
+//    P1 -> OUT &= 0xEC;
+    P1 -> OUT |= 0x12;
+
+    P1 -> SEL0 &= 0xEC;
+    P1 -> SEL1 &= 0xEC;
+
+    P1 -> DIR &= 0xEC;
+    P1 -> DIR |= 0x01;
+
+    P1 -> REN &= 0xEC;
+    P1 -> REN |= 0x12;
+
 }
 
 /* Port1_Input: This function reads P1->IN, inverts the data so that
@@ -102,7 +115,7 @@ uint8_t Port1_Input(void){
    * when pushed and 1 when not pushed. Convert to positive logic (so that a
    * 1 means pushed, and 0 means not pushed. Clear all don't care bits
   */
-  return(0);
+  return (~(P1 -> IN) & 0x12);
 }
 
 /* Port1_Output: This function writes P1->OUT, set P1.0 to match data, and
@@ -113,9 +126,11 @@ void Port1_Output(uint8_t data){  // write output to P1.0
    * a) clear bit 0 of P1->OUT
    * b) set bit 0 = data  (note that data should be 0 or 1)
   */
+    P1 -> OUT &= ~0x01; // 11111110 after ~ it becomes 00000001
+    P1 -> OUT |= data;
 }
 
-/* Port2_Init: This function initializes P2.0, P2.1, and P2.3 (and ONLY those
+/* Port2_Init: This function initializes P2.0, P2.1, and P2.2 (and ONLY those
  *              pins) as follows:
  *              1)  configure as GPIO   P2->SEL0, P2->SEL1
  *              2)  turn off all LED's initially (OUT register) P2->OUT
@@ -128,6 +143,12 @@ void Port2_Init(void){
    * Your code should ONLY modify bits 0, 1, and 2 of Port 2 as required.
    * Remember, | to set bits, & to clear bits
   */
+    P2 -> OUT &= 0xF8;
+    P2 -> SEL0 &= 0xF8;
+    P2 -> SEL1 &= 0xF8;
+    P2 -> DIR |= 0x07;
+    P2 -> REN &= 0xF8;
+    P2 -> DS |= 0x07;
 }
 
 
@@ -137,6 +158,8 @@ void Port2_Init(void){
  */
 void Port2_Output(uint8_t data){  // write three outputs bits of P2
  /* Follow similar methodology for Port1_Output */
+    P2 -> OUT &= ~0x07;
+    P2 -> OUT |= data;
 }
 
 
