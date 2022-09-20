@@ -195,88 +195,43 @@ int main(void){
                                    // initialize P1.0 as output to red LED
   Port2_Init();                    // initialize P2.2-P2.0 and make them outputs (P2.2-P2.0 built-in LEDs)
 
-  uint8_t state = 0; // keeps track of state of switch
-  uint8_t colorsArray[] = {RED, GREEN, BLUE}; // color "key" array
+  uint8_t status;
+  uint8_t previousStatus;
+  uint8_t led2On = LED_OFF;
+  uint8_t colorArray[] = {RED, GREEN, BLUE};
   uint8_t currentColor = 0;
 
+
   while(1){
+      status = Port1_Input();
 
-      if (Port1_Input() & SW1) { // Switch 1: When pushed - lights LED1
+      if (status & SW1 || status & SW2) { // When SW1 or SW2 pushed - lights LED1
           Port1_Output(RED);
-
-          if (!(state & SW1)) { // Switch 1: On transition from not-pushed to pushed - toggles LED2 output on/off
-              if (!Port2_Input()) {
-                  Port2_Output(colorsArray[currentColor]);
-              } else {
-                  Port2_Output(LED_OFF);
-              }
-          }
-
       } else {
           Port1_Output(LED_OFF);
       }
 
-
-      if (Port1_Input() & SW2) { // Switch 2: When pushed - lights LED1
-          Port1_Output(RED);
-
-          if (!(state & SW2)) { // Switch 2: On transition from not-pushed to pushed: If LED2 output is ON, cycle through the LED Colors: Red -> Green -> Blue -> Red …
-              if (Port2_Input()) {
-                  if (currentColor >= 4) {
-                      currentColor = 0;
-                  }
-                  currentColor += 1;
-                  Port2_Output(colorsArray[currentColor]);
-              }
+      if ((status & SW1) && !(previousStatus & SW1)) {  // On transition from SW1 not-pushed to pushed - toggles LED2 output on/off
+          if (led2On & !LED_OFF) {
+              led2On = LED_OFF; // makes sure 3rd if-statement (led2On) works
+              Port2_Output(LED_OFF);
+          } else {
+              led2On = colorArray[currentColor];
+              Port2_Output(colorArray[currentColor]);
           }
-
-      } else {
-          Port1_Output(LED_OFF);
       }
 
-      state = Port1_Input; // saves switch state
+      if ((status & SW2) && !(previousStatus & SW2)) { // On transition from SW2 not-pushed to pushed: If LED2 output is ON, cycle through the LED Colors: Red -> Green -> Blue -> Red …
+          if (led2On) {
+              currentColor = currentColor + 1;
+              if (currentColor == 4) {
+                  currentColor = 0;
+              }
+              led2On = colorArray[currentColor];
+              Port2_Output(colorArray[currentColor]);
+          }
+      }
+
+      previousStatus = status;
   }
 }
-
-// Old Code for reference:
-
-//int Port1On = 0;
-//int Port2On = 0;
-//int counter = 0;
-//int arr[3] = {RED, GREEN, BLUE};
-
-//    status = Port1_Input();
-//    switch(status){                 // data will represent P1.4 and P1.1 in positive logic
-//      case SW1:                    // SW1 pressed
-//          if (SW1 == 1) {
-//              Port1_Output(RED); // Port1_Output(RED);
-//              Port1On = 1;
-//          } else {
-//              Port1On = 0;
-//              Port1_Output(LED_OFF);
-//          }
-////        Port2_Output(BLUE);
-////        Port1_Output(RED);
-//        break;
-//      case SW2:                    // SW2 pressed
-//          if (SW2 == 1) {
-//              Port1_Output(RED);
-//          } else if (Port2On == 1) {
-//              Port2_Output(arr[(counter = (counter + 1) % 3)]);
-//              Port2On = 1;
-//          } else {
-//              Port2On = 0;
-//              Port1_Output(LED_OFF);
-//          }
-////        Port2_Output(RED);
-////        Port1_Output(RED);
-//        break;
-//      case (SW1+SW2):                    // both switches pressed
-//        Port2_Output(BLUE+RED);
-//        Port1_Output(RED);
-//        break;
-//      case LED_OFF:                    // neither switch pressed
-//        Port2_Output(LED_OFF);
-//        Port1_Output(LED_OFF);
-//        break;
-//    }
