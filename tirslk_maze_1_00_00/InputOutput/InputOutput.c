@@ -212,19 +212,19 @@ int main(void){
       }
 
       if ((status & SW1) && !(previousStatus & SW1)) {  // On transition from SW1 not-pushed to pushed - toggles LED2 output on/off
-          if (led2On & !LED_OFF) {
-              led2On = LED_OFF; // makes sure 3rd if-statement (led2On) works
-              Port2_Output(LED_OFF);
-          } else {
+          if (led2On == LED_OFF) {
               led2On = colorArray[currentColor];
               Port2_Output(colorArray[currentColor]);
+          } else {
+              led2On = LED_OFF; // makes sure 3rd if-statement (led2On) works
+              Port2_Output(LED_OFF);
           }
       }
 
       if ((status & SW2) && !(previousStatus & SW2)) { // On transition from SW2 not-pushed to pushed: If LED2 output is ON, cycle through the LED Colors: Red -> Green -> Blue -> Red …
           if (led2On) {
               currentColor = currentColor + 1;
-              if (currentColor == 4) {
+              if (currentColor == 3) {
                   currentColor = 0;
               }
               led2On = colorArray[currentColor];
