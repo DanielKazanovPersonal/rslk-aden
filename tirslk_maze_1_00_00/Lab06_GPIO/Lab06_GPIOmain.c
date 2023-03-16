@@ -56,8 +56,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 #include <stdint.h>
 #include "msp.h"
-#include "..\inc\Reflectance.h"
-#include "..\inc\Clock.h"
+#include "../inc/Reflectance.h"
+#include "../inc/Clock.h"
 
 uint8_t Data; // QTR-8RC
 
@@ -85,7 +85,17 @@ int main(void){
     Data = Reflectance_Read(1000); // your measurement
     // turn on LED2.RGB as described in the comments
     // write this code
-
+    uint8_t color = 0x00;
+    if (Data & 0xC0) {
+        color |= 0x04;
+    }
+    if (Data & 0x3C) {
+        color |= 0x02;
+    }
+    if (Data & 0x03) {
+        color |= 0x01;
+    }
+    P2 -> OUT = (P2 -> OUT & ~0x07) | color;
 
     Clock_Delay1ms(10);
   }

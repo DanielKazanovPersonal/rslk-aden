@@ -70,7 +70,14 @@ policies, either expressed or implied, of the FreeBSD Project.
 void Reflectance_Init(void){
     // P7.0-7 are the IR reflectance sensor initialize to GPIO, input
     // P5.3 is the IR LED
-
+    P7 -> REN = 0x00;
+    P7 -> DIR = 0x00;
+    P7 -> SEL0 = 0x00;
+    P7 -> SEL1 = 0x00;
+    P5 -> OUT &= ~0x08;
+    P5 -> DIR |= 0x08;
+    P5 -> SEL0 &= ~0x08;
+    P5 -> SEL1 &= ~0x08;
 }
 
 // ------------Reflectance_Read------------
@@ -91,7 +98,15 @@ void Reflectance_Init(void){
 // Assumes: Reflectance_Init() has been called
 uint8_t Reflectance_Read(uint32_t time){
     // write this as part of Lab 6
-    return 0;
+    P5 -> OUT |= 0x08;
+    P7 -> DIR = 0xFF;
+    P7 -> OUT = 0xFF;
+    Clock_Delay1us(10);
+    P7 -> DIR = 0x00;
+    Clock_Delay1us(time);
+    uint8_t read = P7 -> IN;
+    P5 -> OUT &= 0b11110111;
+    return read;
 }
 
 // ------------Reflectance_Center------------
@@ -117,8 +132,15 @@ uint8_t Reflectance_Read(uint32_t time){
 // 0,0          neither        lost
 // Assumes: Reflectance_Init() has been called
 uint8_t Reflectance_Center(uint32_t time){
-    // write this as part of Lab 6
-  return 0; // replace this line
+    P5 -> DIR |= 0x08;
+    P7 -> DIR = 0xFF;
+    P7 -> OUT = 0xFF;
+    Clock_Delay1us(10);
+    P7 -> DIR = 0x00;
+    Clock_Delay1us(time);
+    uint8_t center = P7 -> IN & 0b00011000;
+    P5 -> DIR |= 0b11110111;
+    return center >> 3;
 }
 
 
