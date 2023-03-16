@@ -149,6 +149,7 @@ uint8_t Reflectance_Center(uint32_t time){
 // Output: position in 0.1mm relative to center of line
 int32_t Reflectance_Position(uint8_t data){
     // TODO: Write this method.
+    return 0;
 }
 
 // ------------Reflectance_Start------------
