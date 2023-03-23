@@ -132,14 +132,14 @@ uint8_t Reflectance_Read(uint32_t time){
 // 0,0          neither        lost
 // Assumes: Reflectance_Init() has been called
 uint8_t Reflectance_Center(uint32_t time){
-    P5 -> DIR |= 0x08;
+    P5 -> OUT |= 0x08;
     P7 -> DIR = 0xFF;
     P7 -> OUT = 0xFF;
     Clock_Delay1us(10);
-    P7 -> DIR = 0x00;
+    P7 -> DIR = 0;
     Clock_Delay1us(time);
-    uint8_t center = P7 -> IN & 0b00011000;
-    P5 -> DIR |= 0b11110111;
+    uint8_t center = (P7 -> IN) & 0b00011000;
+    P5 -> OUT &= 0b11110111;
     return center >> 3;
 }
 
