@@ -71,6 +71,23 @@ void Debug_LED_Init() {
     P2->DS |= 0x07;
 }
 
+uint8_t dataValid;
+int mScnt;
+
+void SysTick_Handler(void) {
+    if (msCnt == 0) {
+        Reflectance_Start();
+    }
+    if (msCnt == 1) {
+        Data = Reflectance_End();
+        dataValid = 1;
+    }
+    msCnt++;
+    if (msCnt == 10) {
+        msCnt = 0;
+    }
+}
+
 // Test main for part1
 // 1. Initialize the robot
 // 2. Every 10mS, read the line sensor and store the result in Data
@@ -81,23 +98,28 @@ int main(void){
   Clock_Init48MHz();
   Debug_LED_Init();
   Reflectance_Init(); // your initialization
+
+  SysTickInts_Init(47999, 1);
+  EnableInterrupts();
   while(1){
-    Data = Reflectance_Read(1000); // your measurement
+//    Data = Reflectance_Read(1000); // your measurement
     // turn on LED2.RGB as described in the comments
     // write this code
-    uint8_t color = 0x00;
-    if (Data & 0xC0) {
-        color |= 0x04;
+      if (dataValid) {
+        uint8_t color = 0x00;
+        if (Data & 0xC0) {
+            color |= 0x04;
+        }
+        if (Data & 0x3C) {
+            color |= 0x02;
+        }
+        if (Data & 0x03) {
+            color |= 0x01;
+        }
+        P2 -> OUT = (P2 -> OUT & ~0x07) | color;
     }
-    if (Data & 0x3C) {
-        color |= 0x02;
-    }
-    if (Data & 0x03) {
-        color |= 0x01;
-    }
-    P2 -> OUT = (P2 -> OUT & ~0x07) | color;
-
-    Clock_Delay1ms(10);
+    dataValid = 0;
+//    Clock_Delay1ms(10);
   }
 }
 
