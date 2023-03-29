@@ -75,16 +75,15 @@ uint8_t dataValid;
 int mScnt;
 
 void SysTick_Handler(void) {
-    if (msCnt == 0) {
+    if (mScnt == 0) {
         Reflectance_Start();
-    }
-    if (msCnt == 1) {
+    } else if (mScnt == 1) {
         Data = Reflectance_End();
         dataValid = 1;
     }
-    msCnt++;
-    if (msCnt == 10) {
-        msCnt = 0;
+    mScnt++;
+    if (mScnt == 10) {
+        mScnt = 0;
     }
 }
 
