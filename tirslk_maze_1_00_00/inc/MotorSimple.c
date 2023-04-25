@@ -71,7 +71,21 @@ void Motor_InitSimple(void){
      * P2.7, P2.6:    Left, Right PWM
      * P3.7, P3.6:    Left, Right SLP
      */
-// TODO: Write this function
+    // configure as GPIO (both SEL0 and SEL1 set to 0 for selected pins
+    P5->SEL0 &= 0xCF;
+    P2->SEL0 &= 0x3F;
+    P3->SEL0 &= 0x3F;
+    P5->SEL1 &= 0xCF;
+    P2->SEL1 &= 0x3F;
+    P3->SEL1 &= 0x3F;
+    // Set value to be output to 0 for selected pins
+    P5->OUT &= 0xCF;
+    P2->OUT &= 0x3F;
+    P3->OUT &= 0x3F;
+    // Set Direction to 1 (Output) for selected pins
+    P5->DIR |= ~0xCF;
+    P2->DIR |= ~0x3F;
+    P3->DIR |= ~0x3F;
 }
 
 void Motor_StopSimple(void){
