@@ -2,19 +2,17 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-SHELL = cmd.exe
-
 # Add inputs and outputs from these tool invocations to the build variables 
 CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
-C:/Dropbox/TIteachingProject/ValvanoWare/inc/Bump.c \
-C:/Dropbox/TIteachingProject/ValvanoWare/inc/Clock.c \
+/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/Bump.c \
+/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/Clock.c \
 ../Lab12_Motorsmain.c \
-C:/Dropbox/TIteachingProject/ValvanoWare/inc/LaunchPad.c \
-C:/Dropbox/TIteachingProject/ValvanoWare/inc/MotorSimple.c \
-C:/Dropbox/TIteachingProject/ValvanoWare/inc/SysTick.c \
+/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/LaunchPad.c \
+/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/MotorSimple.c \
+/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/SysTick.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
 
@@ -59,12 +57,12 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
-"C:/Dropbox/TIteachingProject/ValvanoWare/inc/Bump.c" \
-"C:/Dropbox/TIteachingProject/ValvanoWare/inc/Clock.c" \
+"/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/Bump.c" \
+"/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/Clock.c" \
 "../Lab12_Motorsmain.c" \
-"C:/Dropbox/TIteachingProject/ValvanoWare/inc/LaunchPad.c" \
-"C:/Dropbox/TIteachingProject/ValvanoWare/inc/MotorSimple.c" \
-"C:/Dropbox/TIteachingProject/ValvanoWare/inc/SysTick.c" \
+"/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/LaunchPad.c" \
+"/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/MotorSimple.c" \
+"/Users/danielkazanov/git/rslk-aden-kazanovd-mvla/tirslk_maze_1_00_00/inc/SysTick.c" \
 "../startup_msp432p401r_ccs.c" \
 "../system_msp432p401r.c" 
 

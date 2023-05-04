@@ -111,7 +111,7 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
     uint32_t highTime = duty * 48; // Determines high time from duty (uS) * SysTicks per 1uS
     uint32_t lowTime = (10000 - duty) * 48; // Determines low time: (period - duty) * SysTicks per 1uS period = 10000
 
-    for (int i = 0; i < time; i++) {
+    while (time) {
         if (Bump_Read()) { // Read the bump sensors - if collision, stop the motors and return
             Motor_StopSimple();
             return;
@@ -121,6 +121,8 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
 
         P2->OUT &= ~0b11000000; // Turn motors off, wait low time (use SysTick_Wait(low time)) (P2.6, P2.7 ➔0)
         SysTick_Wait(lowTime);
+
+        time--;
     }
 
     Motor_StopSimple(); // Stop the motors and return (reuse existing code)
@@ -139,12 +141,14 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time){
     uint32_t highTime = duty * 48; // Determines high time from duty (uS) * SysTicks per 1uS
     uint32_t lowTime = (10000 - duty) * 48; // Determines low time: (period - duty) * SysTicks per 1uS period = 10000
 
-    for (int i = 0; i < time; i++) {
+    while (time) {
         P2->OUT |= 0b11000000; // Turn motors on, wait high time (use SysTick_Wait(high time)) (P2.6, P2.7 ➔1)
         SysTick_Wait(highTime);
 
         P2->OUT &= ~0b11000000; // Turn motors off, wait low time (use SysTick_Wait(low time)) (P2.6, P2.7 ➔0)
         SysTick_Wait(lowTime);
+
+        time--;
     }
 
     Motor_StopSimple(); // Stop the motors and return (reuse existing code)
@@ -164,7 +168,7 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time){
     uint32_t highTime = duty * 48; // Determines high time from duty (uS) * SysTicks per 1uS
     uint32_t lowTime = (10000 - duty) * 48; // Determines low time: (period - duty) * SysTicks per 1uS period = 10000
 
-    for (int i = 0; i < time; i++) {
+    while (time) {
         if (Bump_Read()) { // Read the bump sensors - if collision, stop the motor and return
             Motor_StopSimple();
             return;
@@ -174,6 +178,8 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time){
 
         P2->OUT &= ~0b10000000; // Turn motor off, wait low time (use SysTick_Wait(low time)) (P2.6, P2.7 ➔0)
         SysTick_Wait(lowTime);
+
+        time--;
     }
 
     Motor_StopSimple(); // Stop the motor and return (reuse existing code)
@@ -190,10 +196,10 @@ void Motor_RightSimple(uint16_t duty, uint32_t time){
 // TODO: Write this function
     P5->OUT &= ~0b110000; // Sets direction to forward for both motors
     P3->OUT |= 0b1000000; // Activates motors (!SLP, pins 3.6 and 3.7)
-    uint32_t highTime = duty; // Determines high time from duty (uS) * SysTicks per 1uS
+    uint32_t highTime = duty * 48; // Determines high time from duty (uS) * SysTicks per 1uS
     uint32_t lowTime = (10000 - duty) * 48; // Determines low time: (period - duty) * SysTicks per 1uS period = 10000
 
-    for (int i = 0; i < time; i++) {
+    while (time) {
         if (Bump_Read()) { // Read the bump sensors - if collision, stop the motor and return
             Motor_StopSimple();
             return;
@@ -203,6 +209,8 @@ void Motor_RightSimple(uint16_t duty, uint32_t time){
 
         P2->OUT &= ~0b1000000; // Turn motor off, wait low time (use SysTick_Wait(low time)) (P2.6, P2.7 ➔0)
         SysTick_Wait(lowTime);
+
+        time--;
     }
 
     Motor_StopSimple(); // Stop the motor and return (reuse existing code)
